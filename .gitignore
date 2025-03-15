@@ -1,0 +1,8 @@
+dist
+targets
+src
+node*
+openssl*
+build
+*.o
+*.a

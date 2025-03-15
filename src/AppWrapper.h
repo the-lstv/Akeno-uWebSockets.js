@@ -436,23 +436,26 @@ void uWS_App_get(F f, const FunctionCallbackInfo<Value> &args) {
     PerContextData *perContextData = (PerContextData *) Local<External>::Cast(args.Data())->Value();
 
     (app->*f)(std::string(pattern.getString()), [cb = std::move(cb), perContextData](auto *res, auto *req) {
-        Isolate *isolate = perContextData->isolate;
-        HandleScope hs(isolate);
 
-        Local<Object> resObject = perContextData->resTemplate[getAppTypeIndex<APP>()].Get(isolate)->Clone();
-        resObject->SetAlignedPointerInInternalField(0, res);
+        res->end("Hello world!");
 
-        Local<Object> reqObject = perContextData->reqTemplate[std::is_same<APP, uWS::H3App>::value].Get(isolate)->Clone();
-        reqObject->SetAlignedPointerInInternalField(0, req);
+        // Isolate *isolate = perContextData->isolate;
+        // HandleScope hs(isolate);
 
-        Local<Value> argv[] = {resObject, reqObject};
-        CallJS(isolate, cb.Get(isolate), 2, argv);
+        // Local<Object> resObject = perContextData->resTemplate[getAppTypeIndex<APP>()].Get(isolate)->Clone();
+        // resObject->SetAlignedPointerInInternalField(0, res);
 
-        /* Properly invalidate req */
-        reqObject->SetAlignedPointerInInternalField(0, nullptr);
+        // Local<Object> reqObject = perContextData->reqTemplate[std::is_same<APP, uWS::H3App>::value].Get(isolate)->Clone();
+        // reqObject->SetAlignedPointerInInternalField(0, req);
 
-        /* µWS itself will terminate if not responded and not attached
-         * onAborted handler, so we can assume it's done */
+        // Local<Value> argv[] = {resObject, reqObject};
+        // CallJS(isolate, cb.Get(isolate), 2, argv);
+
+        // /* Properly invalidate req */
+        // reqObject->SetAlignedPointerInInternalField(0, nullptr);
+
+        // /* µWS itself will terminate if not responded and not attached
+        //  * onAborted handler, so we can assume it's done */
     });
 
     args.GetReturnValue().Set(args.Holder());
