@@ -18,6 +18,7 @@
 #include "App.h"
 #include <v8.h>
 #include "Utilities.h"
+#include "akeno.cpp"
 using namespace v8;
 
 /* uWS.App.ws('/pattern', behavior) */
@@ -437,7 +438,7 @@ void uWS_App_get(F f, const FunctionCallbackInfo<Value> &args) {
 
     (app->*f)(std::string(pattern.getString()), [cb = std::move(cb), perContextData](auto *res, auto *req) {
 
-        res->end("Hello world!");
+        resolveRequest(res, req);
 
         // Isolate *isolate = perContextData->isolate;
         // HandleScope hs(isolate);
